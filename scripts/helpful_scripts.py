@@ -81,7 +81,7 @@ def deploy_mocks(decimals=DECIMALS, initial_value=INITIAL_VALUE):
 def fund_with_link(
     contract_address, account=None, link_token=None, amount=Web3.toWei(0.25, "ether")
 ):
-    amount = 2500000000000000000
+    amount = 1000000000000000000
     account = account if account else get_account()
     print(f"Account address: {account.address}")
     link_token = link_token if link_token else get_contract("link_token")
