@@ -4,7 +4,7 @@ from scripts.helpful_scripts import (
     get_contract,
     fund_with_link,
 )
-from brownie import AdvancedCollectible, network, config
+from brownie import AdvancedCollectible, network, config, Contract
 import time
 
 sample_token_uri = (
@@ -12,7 +12,7 @@ sample_token_uri = (
 )
 
 
-def deploy_and_create():
+def deploy():
     account = get_account()
     advanced_collectible = AdvancedCollectible.deploy(
         get_contract("vrf_coordinator"),
@@ -21,14 +21,27 @@ def deploy_and_create():
         config["networks"][network.show_active()]["fee"],
         {"from": account},
     )
-    fund_with_link(advanced_collectible.address)
+    return advanced_collectible
+
+
+def create():
+    account = get_account()
+
+    # TODO parameterize this
+    advanced_collectible = Contract("0x3F9DA6752BD629BBD31F69A776C1983E2C9CAEC7")
+
+    # subscription = fund_with_link(advanced_collectible.address)
+    print("New contract has been created")
     creating_tx = advanced_collectible.createCollectible({"from": account})
     creating_tx.wait(1)
-    # time.sleep(60)
+    time.sleep(60)
     print("New token has been created")
     print(f"You have created {advanced_collectible.tokenCounter()} collectibles!")
     return advanced_collectible, creating_tx
 
 
-def main():
-    deploy_and_create()
+def main(option):
+    if option == 1:
+        deploy()
+    else:
+        create()
